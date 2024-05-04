@@ -35,7 +35,7 @@ const renderCard = (cardData, removeCard) => {
   return card;
 };
 
-initialCards.map((cardData) => {
+initialCards.forEach((cardData) => {
   const card = renderCard(cardData, removeCard);
   cardsList.append(card);
 });
