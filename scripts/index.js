@@ -15,7 +15,7 @@ const cardsList = document.querySelector('.places__list');
 const removeCard = (evt) => {
   const cardItem = evt.target.closest('.card');
   cardItem.remove();
-}
+};
 
 const renderCard = (cardData, removeCard) => {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -27,12 +27,15 @@ const renderCard = (cardData, removeCard) => {
   cardImg.src = cardData.link;
 
   const deleteButton = card.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click', removeCard)
+  deleteButton.addEventListener('click', removeCard);
 
-  const title = card.querySelector('.card__title');
-  title.textContent = cardData.name;
+  const cardTitle = card.querySelector('.card__title');
+  cardTitle.textContent = cardData.name;
 
-  cardsList.append(card);
+  return card;
 };
 
-initialCards.map((card) => renderCard(card, removeCard));
+initialCards.map((cardData) => {
+  const card = renderCard(cardData, removeCard);
+  cardsList.append(card);
+});
