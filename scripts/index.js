@@ -27,7 +27,6 @@ const renderCard = (cardData, removeCard) => {
   cardImg.src = cardData.link;
 
   const deleteButton = card.querySelector('.card__delete-button');
-  
   deleteButton.addEventListener('click', removeCard)
 
   const title = card.querySelector('.card__title');
