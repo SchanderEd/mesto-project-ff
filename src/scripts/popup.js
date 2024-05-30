@@ -26,6 +26,7 @@ const closePopup = (evt) => {
 
   if (evt.target === closePopupBtn || evt.target.contains(popup)) {
     popup.classList.remove('popup_is-opened');
+    document.removeEventListener('keydown', keydownClosePopup);
   };
 };
 
