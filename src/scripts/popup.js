@@ -1,30 +1,20 @@
-const popups = [
-  {
-    type: 'edit profile',
-    selectorPopup: '.popup_type_edit',
-    classButton: 'profile__edit-button'
-  },
-  {
-    type: 'image popup',
-    selectorPopup: '.popup_type_image',
-    classButton: 'card__image'
-  },
-  {
-    type: 'new card popup',
-    selectorPopup: '.popup_type_new-card',
-    classButton: 'profile__add-button'
-  }
-];
+import { popups } from "./popups.js";
 
 const profileEditBtn = document.querySelector('.profile__edit-button');
 const newCardBtn = document.querySelector('.profile__add-button');
 const imgBtn = document.querySelectorAll('.card__image');
 
 const closePopup = (evt) => {
-  const popup = evt.target.closest('.popup');
+  const popup = document.querySelector('.popup_is-opened');
   const closePopupBtn = popup.querySelector('.popup__close');
+  const form = popup.querySelector('.popup__form');
 
   if (evt.target === closePopupBtn || evt.target.contains(popup)) {
+
+    if (form) {
+      form.reset();
+    };
+
     popup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', keydownClosePopup);
   };
@@ -32,8 +22,14 @@ const closePopup = (evt) => {
 
 const keydownClosePopup = (evt) => {
   const domPopup = document.querySelector('.popup_is-opened');
-  
+  const form = domPopup.querySelector('.popup__form');
+
   if (evt.key === 'Escape') {
+
+    if (form) {
+      form.reset();
+    };
+
     domPopup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', keydownClosePopup);
   };
