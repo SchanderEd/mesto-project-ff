@@ -11,9 +11,17 @@ const closePopup = (evt) => {
 
   if (evt.target === closePopupBtn || evt.target.contains(popup)) {
 
-    if (form) {
+    if (form && !form.name && !form.description) {
       form.reset();
     };
+
+    if (form && form.name && form.description) {
+      let profileTitle = document.querySelector('.profile__title');
+      let profileDescription = document.querySelector('.profile__description');
+
+      form.name.value = profileTitle.textContent;
+      form.description.value = profileDescription.textContent;
+    }
 
     popup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', keydownClosePopup);
@@ -26,9 +34,17 @@ const keydownClosePopup = (evt) => {
 
   if (evt.key === 'Escape') {
 
-    if (form) {
+    if (form && !form.name && !form.description) {
       form.reset();
     };
+
+    if (form && form.name && form.description) {
+      let profileTitle = document.querySelector('.profile__title');
+      let profileDescription = document.querySelector('.profile__description');
+
+      form.name.value = profileTitle.textContent;
+      form.description.value = profileDescription.textContent;
+    }
 
     domPopup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', keydownClosePopup);
