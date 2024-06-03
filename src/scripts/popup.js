@@ -1,30 +1,21 @@
 import { popups } from "./popups.js";
-
-const profileEditBtn = document.querySelector('.profile__edit-button');
-const newCardBtn = document.querySelector('.profile__add-button');
-const imgBtn = document.querySelectorAll('.card__image');
+import { profileInputValue } from './profileEdit.js';
+import {
+  profileTitle,
+  profileDescription,
+  nameInput,
+  descriptionInput
+} from './domElements.js'
 
 const closePopup = (evt) => {
   const popup = document.querySelector('.popup_is-opened');
-  const closePopupBtn = popup.querySelector('.popup__close');
-  const form = popup.querySelector('.popup__form');
+  const closeBtn = popup.querySelector('.popup__close');
+  const saveBtn = popup.querySelector('.popup__button');
 
-  if (evt.target === closePopupBtn || evt.target.contains(popup)) {
-
-    if (form && !form.name && !form.description) {
-      form.reset();
-    };
-
-    if (form && form.name && form.description) {
-      let profileTitle = document.querySelector('.profile__title');
-      let profileDescription = document.querySelector('.profile__description');
-
-      form.name.value = profileTitle.textContent;
-      form.description.value = profileDescription.textContent;
-    }
-
-    popup.classList.remove('popup_is-opened');
+  if (evt.target.contains(popup) || evt.target === closeBtn || evt.target === saveBtn) {
+    popup.classList.remove('popup_is-opened'); 
     document.removeEventListener('keydown', keydownClosePopup);
+    popup.removeEventListener('click', closePopup);
   };
 };
 
@@ -39,12 +30,8 @@ const keydownClosePopup = (evt) => {
     };
 
     if (form && form.name && form.description) {
-      let profileTitle = document.querySelector('.profile__title');
-      let profileDescription = document.querySelector('.profile__description');
-
-      form.name.value = profileTitle.textContent;
-      form.description.value = profileDescription.textContent;
-    }
+      profileInputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+    };
 
     domPopup.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', keydownClosePopup);
@@ -60,12 +47,13 @@ const openPopup = (evt) => {
   });
 
   const domPopup = document.querySelector(popup[0].selectorPopup);
+  const closeBtn = domPopup.querySelector('.popup__close');
+
   domPopup.classList.add('popup_is-opened');
 
+  closeBtn.addEventListener('click', closePopup);
   domPopup.addEventListener('click', closePopup);
   document.addEventListener('keydown', keydownClosePopup);
 };
 
-profileEditBtn.addEventListener('click', openPopup);
-newCardBtn.addEventListener('click', openPopup);
-imgBtn.forEach((img) => img.addEventListener('click', openPopup));
+export { openPopup, closePopup };
