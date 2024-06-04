@@ -1,21 +1,39 @@
 import { popups } from "./popups.js";
-import { profileInputValue } from './profileEdit.js';
+import { inputValue } from './profileEdit.js';
+import { editProfile } from "./profileEdit.js";
 import {
   profileTitle,
   profileDescription,
   nameInput,
   descriptionInput
-} from './domElements.js'
+} from './domElements.js';
 
-const closePopup = (evt) => {
+const formNewPlaceName = 'new-place';
+
+const closePopup = (popup) => {
+  popup.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', keydownClosePopup);
+  popup.removeEventListener('click', closePopupHandler);
+};
+
+const closePopupHandler = (evt) => {
   const popup = document.querySelector('.popup_is-opened');
   const closeBtn = popup.querySelector('.popup__close');
   const saveBtn = popup.querySelector('.popup__button');
+  const form = popup.querySelector('.popup__form');
 
-  if (evt.target.contains(popup) || evt.target === closeBtn || evt.target === saveBtn) {
-    popup.classList.remove('popup_is-opened'); 
-    document.removeEventListener('keydown', keydownClosePopup);
-    popup.removeEventListener('click', closePopup);
+  const conditionTargetsClose = evt.target.contains(popup) || evt.target === closeBtn;
+
+  if (conditionTargetsClose || evt.target === saveBtn) {
+    closePopup(popup);
+  };
+
+  if (form && form.name && form.description && conditionTargetsClose) {
+    inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+  };
+
+  if (form && form.name === formNewPlaceName && conditionTargetsClose) {
+    form.reset();
   };
 };
 
@@ -25,20 +43,19 @@ const keydownClosePopup = (evt) => {
 
   if (evt.key === 'Escape') {
 
-    if (form && !form.name && !form.description) {
+    if (form && form.name === formNewPlaceName) {
       form.reset();
     };
 
     if (form && form.name && form.description) {
-      profileInputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+      inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
     };
 
-    domPopup.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', keydownClosePopup);
+    closePopup(domPopup);
   };
 };
 
-const openPopup = (evt) => {
+const openPopupHandler = (evt) => {
   let popup = popups.filter((popupData) => {
     if (popupData.classButton === evt.target.classList.value) {
       popup = popupData;
@@ -48,12 +65,17 @@ const openPopup = (evt) => {
 
   const domPopup = document.querySelector(popup[0].selectorPopup);
   const closeBtn = domPopup.querySelector('.popup__close');
+  const form = domPopup.querySelector('.popup__form');
+
+  if (form && form.name && form.description) {
+    form.addEventListener('submit', editProfile);
+  };
 
   domPopup.classList.add('popup_is-opened');
 
-  closeBtn.addEventListener('click', closePopup);
-  domPopup.addEventListener('click', closePopup);
+  closeBtn.addEventListener('click', closePopupHandler);
+  domPopup.addEventListener('click', closePopupHandler);
   document.addEventListener('keydown', keydownClosePopup);
 };
 
-export { openPopup, closePopup };
+export { openPopupHandler, closePopupHandler };

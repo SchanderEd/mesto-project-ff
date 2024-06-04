@@ -1,15 +1,11 @@
-import { closePopup, openPopup } from './popup.js';
-import { editProfile } from './profileEdit.js';
+import { openPopupHandler } from './popup.js';
 import {
   profileEditBtn,
   newCardBtn,
-  profileForm,
   imgBtns,
 } from './domElements.js';
 
 
-profileEditBtn.addEventListener('click', openPopup);
-newCardBtn.addEventListener('click', openPopup);
-imgBtns.forEach((img) => img.addEventListener('click', openPopup));
-
-profileForm.addEventListener('submit', editProfile);
+profileEditBtn.addEventListener('click', openPopupHandler);
+newCardBtn.addEventListener('click', openPopupHandler);
+imgBtns.forEach((img) => img.addEventListener('click', openPopupHandler));

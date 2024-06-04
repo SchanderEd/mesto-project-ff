@@ -5,7 +5,7 @@ import {
   profileDescription
 } from './domElements.js';
 
-const profileInputValue = (inputName, inputDescr, profileName, profileDescr) => {
+const inputValue = (inputName, inputDescr, profileName, profileDescr) => {
   inputName.value = profileName.textContent;
   inputDescr.value = profileDescr.textContent;
 };
@@ -16,9 +16,9 @@ const editProfile = (evt) => {
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = descriptionInput.value;
 
-  profileInputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+  inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
 };
 
-profileInputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
 
-export { profileInputValue, editProfile };
+export { inputValue, editProfile };
