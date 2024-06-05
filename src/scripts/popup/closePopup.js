@@ -1,10 +1,10 @@
-import { inputValue } from '../profile/profileEdit.js';
+import { getProfile } from '../profile/profileEdit.js';
 import {
   profileTitle,
   profileDescription,
   nameInput,
   descriptionInput
-} from '../domElements.js';
+} from '../../index.js';
 
 const formNewPlaceName = 'new-place';
 
@@ -27,7 +27,7 @@ const closePopupHandler = (evt) => {
   };
 
   if (form && form.name && form.description && conditionTargetsClose) {
-    inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+    getProfile(nameInput, descriptionInput, profileTitle, profileDescription);
   };
 
   if (form && form.name === formNewPlaceName && conditionTargetsClose) {
@@ -46,7 +46,7 @@ const keydownClosePopup = (evt) => {
     };
 
     if (form && form.name && form.description) {
-      inputValue(nameInput, descriptionInput, profileTitle, profileDescription);
+      getProfile(nameInput, descriptionInput, profileTitle, profileDescription);
     };
 
     closePopup(domPopup);

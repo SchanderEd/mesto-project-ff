@@ -1,6 +1,6 @@
 import { popups } from "./popups.js";
 import { editProfile } from "../profile/profileEdit.js";
-import { newCardFormSubmit } from "../cards/newCard.js";
+import { newCardFormSubmit } from "../card/newCard.js";
 import { openPopup } from "./openPopup.js";
 import { closePopupHandler, keydownClosePopup } from "./closePopup.js";
 
