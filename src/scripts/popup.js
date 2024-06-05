@@ -1,6 +1,7 @@
 import { popups } from "./popups.js";
 import { inputValue } from './profileEdit.js';
 import { editProfile } from "./profileEdit.js";
+import { newCardFormHandler } from "./newCard.js";
 import {
   profileTitle,
   profileDescription,
@@ -69,6 +70,10 @@ const openPopupHandler = (evt) => {
 
   if (form && form.name && form.description) {
     form.addEventListener('submit', editProfile);
+  };
+
+  if (form && !form.description) {
+    form.addEventListener('submit', newCardFormHandler);
   };
 
   domPopup.classList.add('popup_is-opened');
