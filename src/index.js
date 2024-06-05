@@ -1,5 +1,5 @@
 import './index.css';
-import './scripts/renderCards.js';
-import './scripts/profileEdit.js';
-import './scripts/popup.js';
+import './scripts/cards/renderCards.js';
+import './scripts/profile/profileEdit.js';
+import './scripts/popups/popup.js';
 import './scripts/eventsListeners.js';

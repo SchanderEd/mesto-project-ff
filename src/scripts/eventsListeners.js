@@ -1,9 +1,8 @@
-import { openPopupHandler } from './popup.js';
+import { getPopup } from './popups/popup.js';
 import {
   profileEditBtn,
   newCardBtn,
-  imgBtns,
 } from './domElements.js';
 
-profileEditBtn.addEventListener('click', openPopupHandler);
-newCardBtn.addEventListener('click', openPopupHandler);
+profileEditBtn.addEventListener('click', getPopup);
+newCardBtn.addEventListener('click', getPopup);

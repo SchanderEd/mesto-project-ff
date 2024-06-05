@@ -1,12 +1,8 @@
 import { initialCards } from "./cards.js";
-import { cardsList } from "./domElements.js";
-import { openPopupHandler } from "./popup.js";
-import { likePlace } from "./like.js";
-
-const removeCard = (evt) => {
-  const cardItem = evt.target.closest('.card');
-  cardItem.remove();
-};
+import { cardsList } from "../domElements.js";
+import { getPopup } from "../popups/popup.js";
+import { likePlace } from "../like/like.js";
+import { removeCard } from "./removeCard.js";
 
 const createCard = (cardData, removeCard, openPopup, likePlace) => {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -32,11 +28,11 @@ const createCard = (cardData, removeCard, openPopup, likePlace) => {
 
 const addCards = (cards) => {
   cards.forEach((cardData) => {
-    const card = createCard(cardData, removeCard, openPopupHandler, likePlace);
+    const card = createCard(cardData, removeCard, getPopup, likePlace);
     cardsList.append(card);
   });
 };
 
 addCards(initialCards);
 
-export { createCard, removeCard };
+export { createCard };

@@ -3,7 +3,7 @@ import {
   descriptionInput,
   profileTitle,
   profileDescription
-} from './domElements.js';
+} from '../domElements.js';
 
 const inputValue = (inputName, inputDescr, profileName, profileDescr) => {
   inputName.value = profileName.textContent;

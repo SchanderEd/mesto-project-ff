@@ -1,13 +1,10 @@
-import { popups } from "./popups.js";
-import { inputValue } from './profileEdit.js';
-import { editProfile } from "./profileEdit.js";
-import { newCardFormHandler } from "./newCard.js";
+import { inputValue } from '../profile/profileEdit.js';
 import {
   profileTitle,
   profileDescription,
   nameInput,
   descriptionInput
-} from './domElements.js';
+} from '../domElements.js';
 
 const formNewPlaceName = 'new-place';
 
@@ -56,31 +53,4 @@ const keydownClosePopup = (evt) => {
   };
 };
 
-const openPopupHandler = (evt) => {
-  let popup = popups.filter((popupData) => {
-    if (popupData.classButton === evt.target.classList.value) {
-      popup = popupData;
-      return popup;
-    };
-  });
-
-  const domPopup = document.querySelector(popup[0].selectorPopup);
-  const closeBtn = domPopup.querySelector('.popup__close');
-  const form = domPopup.querySelector('.popup__form');
-
-  if (form && form.name && form.description) {
-    form.addEventListener('submit', editProfile);
-  };
-
-  if (form && !form.description) {
-    form.addEventListener('submit', newCardFormHandler);
-  };
-
-  domPopup.classList.add('popup_is-opened');
-
-  closeBtn.addEventListener('click', closePopupHandler);
-  domPopup.addEventListener('click', closePopupHandler);
-  document.addEventListener('keydown', keydownClosePopup);
-};
-
-export { openPopupHandler, closePopupHandler };
+export { closePopup, closePopupHandler, keydownClosePopup };
