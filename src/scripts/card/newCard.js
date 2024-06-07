@@ -1,4 +1,4 @@
-import { newCardForm, cardsList, cardNameInput, cardPlaceInput } from "../../index.js";
+import { cardsList, cardNameInput, cardPlaceInput } from "../../index.js";
 import { createCard, likeCard, removeCard } from "./card.js";
 import { handlePreviewPicture } from "../popup/previewImgHandler.js";
 
@@ -15,8 +15,6 @@ const newCardFormSubmit = (evt) => {
 
   const card = createCard(newCard, removeCard, handlePreviewPicture, likeCard);
   cardsList.prepend(card);
-
-  newCardForm.reset();
 };
 
 export { newCardFormSubmit };
