@@ -1,6 +1,6 @@
 import { newCardForm, cardsList, cardNameInput, cardPlaceInput } from "../../index.js";
 import { createCard, likeCard, removeCard } from "./card.js";
-import { getPopup } from "../popup/popup.js";
+import { handlePreviewPicture } from "../popup/previewImgHandler.js";
 
 const newCardFormSubmit = (evt) => {
   evt.preventDefault();
@@ -13,7 +13,7 @@ const newCardFormSubmit = (evt) => {
     link: newCardPlace,
   };
 
-  const card = createCard(newCard, removeCard, getPopup, likeCard);
+  const card = createCard(newCard, removeCard, handlePreviewPicture, likeCard);
   cardsList.prepend(card);
 
   newCardForm.reset();

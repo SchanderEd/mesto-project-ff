@@ -2,21 +2,25 @@ import {
   nameInput,
   descriptionInput,
   profileTitle,
-  profileDescription
+  profileDescription,
+  profile
 } from '../../index.js';
 
-const getProfile = (inputName, inputDescr, profileName, profileDescr) => {
-  inputName.value = profileName.textContent;
-  inputDescr.value = profileDescr.textContent;
+const getProfile = (profile) => {
+  nameInput.value = profile.profileName;
+  descriptionInput.value = profile.profileDescription;
+
+  profileTitle.textContent = profile.profileName;
+  profileDescription.textContent = profile.profileDescription;
 };
 
 const editProfile = (evt) => {
   evt.preventDefault();
 
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = descriptionInput.value;
+  profile.profileName = nameInput.value;
+  profile.profileDescription = descriptionInput.value;
 
-  getProfile(nameInput, descriptionInput, profileTitle, profileDescription);
+  getProfile(profile);
 };
 
 export { getProfile, editProfile };
