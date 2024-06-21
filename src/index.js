@@ -4,12 +4,8 @@ import { closePopupHandler } from './scripts/popup/modal.js';
 import { profilePopupHandler } from './scripts/popup/profileHandler.js';
 import { handlePreviewPicture } from './scripts/popup/previewImgHandler.js';
 import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
-import { newCardFormSubmit } from './scripts/card/newCard';
 import { enableValidation } from './scripts/validation/validation.js';
-import { getCards, getProfile, editProfile } from './scripts/api/api.js';
-
-const token = '87c75715-8e69-4ce9-8fec-d6e54f32a865';
-const urlApi = 'https://nomoreparties.co/v1/wff-cohort-17/';
+import { getCards, getProfile, editProfile, newCardSubmit } from './scripts/api/api.js';
 
 const profileForm = document.forms['edit-profile'];
 const profileAvatar = document.querySelector('.profile__image');
@@ -59,7 +55,7 @@ newCardBtn.addEventListener('click', newCardPopupHandler);
 popups.forEach((popup) => popup.addEventListener('click', closePopupHandler));
 closePopupBtns.forEach((btn) => btn.addEventListener('click', closePopupHandler));
 profileForm.addEventListener('submit', editProfile);
-newCardForm.addEventListener('submit', newCardFormSubmit);
+newCardForm.addEventListener('submit', newCardSubmit);
 
 
 enableValidation(settingsValidation);
@@ -81,7 +77,5 @@ export {
   popupEdit,
   popupNewCard,
   settingsValidation,
-  profileAvatar,
-  urlApi,
-  token
+  profileAvatar
 };

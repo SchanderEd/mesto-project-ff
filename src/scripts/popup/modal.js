@@ -21,7 +21,6 @@ const keydownClosePopup = (evt) => {
 const closePopupHandler = (evt) => {
   const openedPopup = document.querySelector('.popup_is-opened');
   const closeBtn = openedPopup.querySelector('.popup__close');
-  const saveBtn = openedPopup.querySelector('.popup__button');
 
   if (evt.target.contains(openedPopup) || evt.target === closeBtn) {
     closePopup(openedPopup);
