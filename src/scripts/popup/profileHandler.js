@@ -1,9 +1,12 @@
-import { profile, popupEdit } from "../../index.js";
-import { getProfile } from "../profile/profileEdit.js";
+import { descriptionInput, nameInput, popupEdit, profileDescription, profileTitle } from "../../index.js";
 import { openPopup } from "./modal.js";
+import { clearInputsError } from "../validation/validation.js";
 
 const profilePopupHandler = () => {
-  getProfile(profile);
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+
+  clearInputsError(popupEdit);
   openPopup(popupEdit);
 };
 

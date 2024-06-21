@@ -1,14 +1,18 @@
 import './index.css';
-import { initialCards } from './scripts/card/cards';
 import { createCard, removeCard, likeCard } from './scripts/card/card';
 import { closePopupHandler } from './scripts/popup/modal.js';
 import { profilePopupHandler } from './scripts/popup/profileHandler.js';
 import { handlePreviewPicture } from './scripts/popup/previewImgHandler.js';
 import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
-import { editProfile, getProfile } from './scripts/profile/profileEdit.js';
 import { newCardFormSubmit } from './scripts/card/newCard';
+import { enableValidation } from './scripts/validation/validation.js';
+import { getCards, getProfile, editProfile } from './scripts/api/api.js';
+
+const token = '87c75715-8e69-4ce9-8fec-d6e54f32a865';
+const urlApi = 'https://nomoreparties.co/v1/wff-cohort-17/';
 
 const profileForm = document.forms['edit-profile'];
+const profileAvatar = document.querySelector('.profile__image');
 const newCardForm = document.forms['new-place'];
 const nameInput = profileForm.querySelector('.popup__input_type_name');
 const descriptionInput = profileForm.querySelector('.popup__input_type_description');
@@ -25,20 +29,30 @@ const popupImg = document.querySelector('.popup_type_image');
 const closePopupBtns = document.querySelectorAll('.popup__close');
 const popups = document.querySelectorAll('.popup');
 
-const profile = {
-  profileName: 'Жак-Ив Кусто',
-  profileDescription: 'Исследователь океана'
+const settingsValidation = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
 };
 
-const addCards = (cards) => {
+const renderCards = (cards) => {
   cards.forEach((cardData) => {
     const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard);
     cardsList.append(card);
   });
 };
 
-getProfile(profile);
-addCards(initialCards);
+Promise.all([
+  getProfile,
+  getCards
+])
+  .then(() => {
+    getProfile();
+    getCards(renderCards);
+  });
 
 profileEditBtn.addEventListener('click', profilePopupHandler);
 newCardBtn.addEventListener('click', newCardPopupHandler);
@@ -46,6 +60,9 @@ popups.forEach((popup) => popup.addEventListener('click', closePopupHandler));
 closePopupBtns.forEach((btn) => btn.addEventListener('click', closePopupHandler));
 profileForm.addEventListener('submit', editProfile);
 newCardForm.addEventListener('submit', newCardFormSubmit);
+
+
+enableValidation(settingsValidation);
 
 export {
   profileForm,
@@ -57,11 +74,14 @@ export {
   cardsList,
   cardNameInput,
   cardPlaceInput,
-  profile,
   profileTitle,
   profileDescription,
   popups,
   popupImg,
   popupEdit,
-  popupNewCard
+  popupNewCard,
+  settingsValidation,
+  profileAvatar,
+  urlApi,
+  token
 };

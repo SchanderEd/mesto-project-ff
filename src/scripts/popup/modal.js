@@ -23,7 +23,7 @@ const closePopupHandler = (evt) => {
   const closeBtn = openedPopup.querySelector('.popup__close');
   const saveBtn = openedPopup.querySelector('.popup__button');
 
-  if (evt.target.contains(openedPopup) || evt.target === closeBtn || evt.target === saveBtn) {
+  if (evt.target.contains(openedPopup) || evt.target === closeBtn) {
     closePopup(openedPopup);
   };
 };
