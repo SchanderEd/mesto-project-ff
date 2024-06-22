@@ -7,6 +7,7 @@ import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
 import { enableValidation } from './scripts/validation/validation.js';
 import { getCards, getProfile, editProfile, newCardSubmit } from './scripts/api/api.js';
 import { renderProfile } from './scripts/profile/renderProfile';
+import { profile, cards } from './scripts/api/api.js';
 
 const profileForm = document.forms['edit-profile'];
 const profileAvatar = document.querySelector('.profile__image');
@@ -40,13 +41,8 @@ const renderCards = async (cardsData, profileData) => {
   const profile = await profileData;
 
   cards.forEach((cardData) => {
-    const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard);
-    cardsList.append(card);
-
-    if (cardData.owner._id !== profile._id) {
-      const deleteBtn = card.querySelector('.card__delete-button');
-      card.removeChild(deleteBtn);
-    };
+    const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard, profile);
+    cardsList.append(card); 
   });
 };
 
@@ -55,9 +51,6 @@ Promise.all([
   getCards
 ])
   .then(() => {
-    const profile = getProfile();
-    const cards = getCards();
-
     renderProfile(profile);
     renderCards(cards, profile);
   });
@@ -93,8 +86,6 @@ export {
 };
 
 /*
-количество лайков,
 постановка и удаление лайков,
 обновление аватара,
-сделать config в api.js
 */

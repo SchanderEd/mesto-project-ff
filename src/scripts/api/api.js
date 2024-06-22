@@ -1,5 +1,10 @@
-const token = '87c75715-8e69-4ce9-8fec-d6e54f32a865';
-const urlApi = 'https://nomoreparties.co/v1/wff-cohort-17/';
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-17/',
+  headers: {
+    authorization: '87c75715-8e69-4ce9-8fec-d6e54f32a865',
+    'Content-Type': 'application/json'
+  }
+};
 
 import { nameInput, descriptionInput, cardsList, cardNameInput, cardPlaceInput } from "../../index.js";
 import { renderProfile } from "../profile/renderProfile.js";
@@ -8,9 +13,9 @@ import { createCard, likeCard, removeCard } from "../card/card.js";
 import { handlePreviewPicture } from "../popup/previewImgHandler.js";
 
 const getCards = () => {
-  return fetch(`${urlApi}cards`, {
+  return fetch(`${config.baseUrl}cards`, {
     headers: {
-      authorization: token
+      authorization: config.headers.authorization
     },
   })
     .then((res) => res.json())
@@ -18,9 +23,9 @@ const getCards = () => {
 };
 
 const getProfile = async () => {
-  return fetch(`${urlApi}users/me`, {
+  return fetch(`${config.baseUrl}users/me`, {
     headers: {
-      authorization: token
+      authorization: config.headers.authorization
     }
   })
     .then(res => res.json())
@@ -30,10 +35,10 @@ const getProfile = async () => {
 const editProfile = () => {
   renderSaving(true);
 
-  return fetch(`${urlApi}users/me`, {
+  return fetch(`${config.baseUrl}users/me`, {
     method: 'PATCH',
     headers: {
-      authorization: token,
+      authorization: config.headers.authorization,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -53,10 +58,10 @@ const editProfile = () => {
 const newCardSubmit = () => {
   renderSaving(true);
 
-  return fetch(`${urlApi}cards`, {
+  return fetch(`${config.baseUrl}cards`, {
     method: 'POST',
     headers: {
-      authorization: token,
+      authorization: config.headers.authorization,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -66,7 +71,7 @@ const newCardSubmit = () => {
   })
     .then((res) => res.json())
     .then((cardData) => {
-      const newCard = createCard(cardData, removeCard, handlePreviewPicture, likeCard);
+      const newCard = createCard(cardData, removeCard, handlePreviewPicture, likeCard, profile);
       cardsList.prepend(newCard);
     })
     .finally(() => {
@@ -74,15 +79,33 @@ const newCardSubmit = () => {
     })
 };
 
+const updateLike = (cardId, cardLikeElement, method) => {
+  return fetch(`${config.baseUrl}cards/likes/${cardId}`, {
+    method: method,
+    headers: {
+      authorization: config.headers.authorization
+    },
+    body: JSON.stringify({
+      profile
+    })
+  }).then((res) => res.json())
+    .then((card) => {
+      cardLikeElement.textContent = card.likes.length;
+    });
+};
+
 const deleteCard = (card, cardId) => {
-  return fetch(`${urlApi}cards/${cardId}`, {
+  return fetch(`${config.baseUrl}cards/${cardId}`, {
     method: 'DELETE',
     headers: {
-      authorization: token,
+      authorization: config.headers.authorization,
     },
   }).then(() => {
     card.remove();
   })
 };
 
-export { getCards, getProfile, editProfile, newCardSubmit, deleteCard };
+const profile = getProfile();
+const cards = getCards();
+
+export { getCards, getProfile, editProfile, newCardSubmit, deleteCard, profile, cards, updateLike };

@@ -1,0 +1,6 @@
+.card__like {
+  position: absolute;
+  right: 26px;
+  bottom: 10px;
+  font-size: 13px;
+}
