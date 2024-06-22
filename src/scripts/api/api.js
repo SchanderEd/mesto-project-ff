@@ -7,26 +7,24 @@ import { renderSaving } from "../renderSaving/renderSaving.js";
 import { createCard, likeCard, removeCard } from "../card/card.js";
 import { handlePreviewPicture } from "../popup/previewImgHandler.js";
 
-const getCards = (renderCards) => {
+const getCards = () => {
   return fetch(`${urlApi}cards`, {
     headers: {
       authorization: token
     },
   })
     .then((res) => res.json())
-    .then((cards) => renderCards(cards));
+    .then((cards) => cards);
 };
 
-const getProfile = () => {
+const getProfile = async () => {
   return fetch(`${urlApi}users/me`, {
     headers: {
       authorization: token
     }
   })
     .then(res => res.json())
-    .then((profileData) => {
-      renderProfile(profileData);
-    });
+    .then((profileData) => profileData);
 };
 
 const editProfile = () => {
@@ -44,7 +42,8 @@ const editProfile = () => {
     })
   })
     .then(() => {
-      getProfile();
+      const updatedProfile = getProfile();
+      renderProfile(updatedProfile);
     })
     .finally(() => {
       renderSaving(false);
@@ -75,4 +74,15 @@ const newCardSubmit = () => {
     })
 };
 
-export { getCards, getProfile, editProfile, newCardSubmit };
+const deleteCard = (card, cardId) => {
+  return fetch(`${urlApi}cards/${cardId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: token,
+    },
+  }).then(() => {
+    card.remove();
+  })
+};
+
+export { getCards, getProfile, editProfile, newCardSubmit, deleteCard };

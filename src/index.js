@@ -6,6 +6,7 @@ import { handlePreviewPicture } from './scripts/popup/previewImgHandler.js';
 import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
 import { enableValidation } from './scripts/validation/validation.js';
 import { getCards, getProfile, editProfile, newCardSubmit } from './scripts/api/api.js';
+import { renderProfile } from './scripts/profile/renderProfile';
 
 const profileForm = document.forms['edit-profile'];
 const profileAvatar = document.querySelector('.profile__image');
@@ -34,10 +35,18 @@ const settingsValidation = {
   errorClass: 'popup__input-error_active'
 };
 
-const renderCards = (cards) => {
+const renderCards = async (cardsData, profileData) => {
+  const cards = await cardsData;
+  const profile = await profileData;
+
   cards.forEach((cardData) => {
     const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard);
     cardsList.append(card);
+
+    if (cardData.owner._id !== profile._id) {
+      const deleteBtn = card.querySelector('.card__delete-button');
+      card.removeChild(deleteBtn);
+    };
   });
 };
 
@@ -46,8 +55,11 @@ Promise.all([
   getCards
 ])
   .then(() => {
-    getProfile();
-    getCards(renderCards);
+    const profile = getProfile();
+    const cards = getCards();
+
+    renderProfile(profile);
+    renderCards(cards, profile);
   });
 
 profileEditBtn.addEventListener('click', profilePopupHandler);
@@ -79,3 +91,10 @@ export {
   settingsValidation,
   profileAvatar
 };
+
+/*
+количество лайков,
+постановка и удаление лайков,
+обновление аватара,
+сделать config в api.js
+*/

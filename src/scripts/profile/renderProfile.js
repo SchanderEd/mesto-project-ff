@@ -6,7 +6,9 @@ import {
   profileAvatar,
 } from '../../index.js';
 
-const renderProfile = (profile) => {
+const renderProfile = async (profileData) => {
+  const profile = await profileData;
+  
   nameInput.value = profile.name;
   descriptionInput.value = profile.about;
 

@@ -1,7 +1,11 @@
+import { deleteCard } from "../api/api";
+
 const createCard = (cardData, removeCard, openPopup, likeCard) => {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.cloneNode(true);
   const card = cardElement.querySelector('.card');
+
+  card.id = cardData._id;
 
   const likeBtn = cardElement.querySelector('.card__like-button');
   likeBtn.addEventListener('click', likeCard);
@@ -24,7 +28,7 @@ const likeCard = (evt) => evt.target.classList.toggle('card__like-button_is-acti
 
 const removeCard = (evt) => {
   const cardItem = evt.target.closest('.card');
-  cardItem.remove();
+  deleteCard(cardItem, cardItem.id);
 };
 
 export { createCard, likeCard, removeCard };
