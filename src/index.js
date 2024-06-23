@@ -5,17 +5,25 @@ import { profilePopupHandler } from './scripts/popup/profileHandler.js';
 import { handlePreviewPicture } from './scripts/popup/previewImgHandler.js';
 import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
 import { enableValidation } from './scripts/validation/validation.js';
-import { getCards, getProfile, editProfile, newCardSubmit } from './scripts/api/api.js';
+import { getCards, getProfile } from './scripts/api/api.js';
 import { renderProfile } from './scripts/profile/renderProfile';
 import { profile, cards } from './scripts/api/api.js';
+import { newCardHandler } from './scripts/addNewCard/addNewCardHandler';
+import { editProfileHandler } from './scripts/profile/editProfileHandler';
+import { updateAvatarHandlerPopup } from './scripts/avatar/updateAvatarHandlerPopup';
+import { updateAvatarHandler } from './scripts/avatar/updateAvatarHandler';
 
 const profileForm = document.forms['edit-profile'];
+const newAvatarForm = document.forms['new-avatar'];
 const profileAvatar = document.querySelector('.profile__image');
 const newCardForm = document.forms['new-place'];
 const nameInput = profileForm.querySelector('.popup__input_type_name');
+const urlAvatarInput = newAvatarForm.querySelector('.popup__input_type_url-avatar');
 const descriptionInput = profileForm.querySelector('.popup__input_type_description');
 const popupEdit = document.querySelector('.popup_type_edit');
+const updateAvatarBtn = document.querySelector('.profile__image-update');
 const popupNewCard = document.querySelector('.popup_type_new-card');
+const newAvatarPopup = document.querySelector('.popup_type_new-avatar');
 const cardsList = document.querySelector('.places__list');
 const cardNameInput = newCardForm.querySelector('.popup__input_type_card-name');
 const cardPlaceInput = newCardForm.querySelector('.popup__input_type_url');
@@ -42,7 +50,7 @@ const renderCards = async (cardsData, profileData) => {
 
   cards.forEach((cardData) => {
     const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard, profile);
-    cardsList.append(card); 
+    cardsList.append(card);
   });
 };
 
@@ -57,11 +65,12 @@ Promise.all([
 
 profileEditBtn.addEventListener('click', profilePopupHandler);
 newCardBtn.addEventListener('click', newCardPopupHandler);
+updateAvatarBtn.addEventListener('click', updateAvatarHandlerPopup);
 popups.forEach((popup) => popup.addEventListener('click', closePopupHandler));
 closePopupBtns.forEach((btn) => btn.addEventListener('click', closePopupHandler));
-profileForm.addEventListener('submit', editProfile);
-newCardForm.addEventListener('submit', newCardSubmit);
-
+profileForm.addEventListener('submit', editProfileHandler);
+newCardForm.addEventListener('submit', newCardHandler);
+newAvatarForm.addEventListener('submit', updateAvatarHandler);
 
 enableValidation(settingsValidation);
 
@@ -82,10 +91,7 @@ export {
   popupEdit,
   popupNewCard,
   settingsValidation,
-  profileAvatar
+  profileAvatar,
+  newAvatarPopup,
+  urlAvatarInput
 };
-
-/*
-постановка и удаление лайков,
-обновление аватара,
-*/

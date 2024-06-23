@@ -6,11 +6,16 @@ const config = {
   }
 };
 
-import { nameInput, descriptionInput, cardsList, cardNameInput, cardPlaceInput } from "../../index.js";
-import { renderProfile } from "../profile/renderProfile.js";
+import { nameInput, descriptionInput, cardNameInput, cardPlaceInput, urlAvatarInput } from "../../index.js";
 import { renderSaving } from "../renderSaving/renderSaving.js";
-import { createCard, likeCard, removeCard } from "../card/card.js";
-import { handlePreviewPicture } from "../popup/previewImgHandler.js";
+
+const checkResponse = (resStatus) => {
+  if (resStatus.ok) {
+    return resStatus.json()
+  };
+
+  return Promise.reject(`Ошибка: ${resStatus.status}`);
+};
 
 const getCards = () => {
   return fetch(`${config.baseUrl}cards`, {
@@ -18,18 +23,20 @@ const getCards = () => {
       authorization: config.headers.authorization
     },
   })
-    .then((res) => res.json())
-    .then((cards) => cards);
+    .then((res) => checkResponse(res))
+    .then((cards) => cards)
+    .catch((err) => console.log(err))
 };
 
-const getProfile = async () => {
+const getProfile = () => {
   return fetch(`${config.baseUrl}users/me`, {
     headers: {
       authorization: config.headers.authorization
     }
   })
-    .then(res => res.json())
-    .then((profileData) => profileData);
+    .then((res) => checkResponse(res))
+    .then((profileData) => profileData)
+    .catch((err) => console.log(err));
 };
 
 const editProfile = () => {
@@ -48,11 +55,10 @@ const editProfile = () => {
   })
     .then(() => {
       const updatedProfile = getProfile();
-      renderProfile(updatedProfile);
+      return updatedProfile;
     })
-    .finally(() => {
-      renderSaving(false);
-    })
+    .catch((err) => console.log(err))
+    .finally(() => renderSaving(false))
 };
 
 const newCardSubmit = () => {
@@ -69,17 +75,13 @@ const newCardSubmit = () => {
       link: cardPlaceInput.value
     })
   })
-    .then((res) => res.json())
-    .then((cardData) => {
-      const newCard = createCard(cardData, removeCard, handlePreviewPicture, likeCard, profile);
-      cardsList.prepend(newCard);
-    })
-    .finally(() => {
-      renderSaving(false);
-    })
+    .then((res) => checkResponse(res))
+    .then((cardData) => cardData)
+    .catch((err) => console.log(err))
+    .finally(() => renderSaving(false))
 };
 
-const updateLike = (cardId, cardLikeElement, method) => {
+const updateLike = async (cardId, method) => {
   return fetch(`${config.baseUrl}cards/likes/${cardId}`, {
     method: method,
     headers: {
@@ -88,24 +90,48 @@ const updateLike = (cardId, cardLikeElement, method) => {
     body: JSON.stringify({
       profile
     })
-  }).then((res) => res.json())
-    .then((card) => {
-      cardLikeElement.textContent = card.likes.length;
-    });
+  }).then((res) => checkResponse(res))
+    .then((card) => card)
+    .catch((err) => console.log(err));
 };
 
-const deleteCard = (card, cardId) => {
+const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}cards/${cardId}`, {
     method: 'DELETE',
     headers: {
       authorization: config.headers.authorization,
     },
-  }).then(() => {
-    card.remove();
-  })
+  });
+};
+
+const updateAvatar = () => {
+  renderSaving(true);
+  return fetch(`${config.baseUrl}users/me/avatar`, {
+    method: 'PATCH',
+    headers: {
+      authorization: config.headers.authorization,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      avatar: urlAvatarInput.value
+    })
+  }).then((res) => checkResponse(res))
+    .then((newAvatar) => newAvatar)
+    .catch((err) => console.log(err))
+    .finally(() => renderSaving(false));
 };
 
 const profile = getProfile();
 const cards = getCards();
 
-export { getCards, getProfile, editProfile, newCardSubmit, deleteCard, profile, cards, updateLike };
+export {
+  getCards,
+  getProfile,
+  editProfile,
+  newCardSubmit,
+  deleteCard,
+  profile,
+  cards,
+  updateLike,
+  updateAvatar
+};

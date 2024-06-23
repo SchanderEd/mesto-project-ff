@@ -8,6 +8,7 @@
   background-position: center;
   object-fit: cover;
   margin: 0 29px 0 0;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 740px) {

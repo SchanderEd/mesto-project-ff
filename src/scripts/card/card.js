@@ -13,9 +13,8 @@ const createCard = (cardData, removeCard, openPopup, likeCard, profile) => {
   const isLikedCard = cardData.likes.some((likedCard) => likedCard._id === profile._id);
 
   if (isLikedCard) {
-    likeBtn.classList.add('card__like-button_is-active')
+    likeBtn.classList.add('card__like-button_is-active');
   };
-
 
   likeBtn.addEventListener('click', likeCard);
 
@@ -38,22 +37,30 @@ const createCard = (cardData, removeCard, openPopup, likeCard, profile) => {
   return card;
 };
 
+const updateLikeElement = async (like, likeElement) => {
+  const updatedLike = await like;
+  likeElement.textContent = updatedLike.likes.length;
+};
+
 const likeCard = (evt) => {
   const cardItem = evt.target.closest('.card');
   const likeElement = cardItem.querySelector('.card__like');
   const likeBtn = evt.target;
 
   if (likeBtn.classList.contains('card__like-button_is-active')) {
-    updateLike(cardItem.id, likeElement, 'DELETE')
+    const removeLike = updateLike(cardItem.id, 'DELETE');
+    updateLikeElement(removeLike, likeElement);
   } else {
-    updateLike(cardItem.id, likeElement, 'PUT');
+    const addLike = updateLike(cardItem.id, 'PUT');
+    updateLikeElement(addLike, likeElement);
   };
   evt.target.classList.toggle('card__like-button_is-active');
 };
 
 const removeCard = (evt) => {
   const cardItem = evt.target.closest('.card');
-  deleteCard(cardItem, cardItem.id);
+  deleteCard(cardItem.id);
+  cardItem.remove();
 };
 
 export { createCard, likeCard, removeCard };
