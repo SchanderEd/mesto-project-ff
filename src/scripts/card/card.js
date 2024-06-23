@@ -57,10 +57,16 @@ const likeCard = (evt) => {
   evt.target.classList.toggle('card__like-button_is-active');
 };
 
-const removeCard = (evt) => {
+const removeCard = async (evt) => {
   const card = document.getElementById(evt.target.id);
-  deleteCard(card.id);
-  card.remove();
+  const deleteResponse = await deleteCard(card.id);
+  deleteResponse.json();
+
+  if (deleteResponse.ok) {
+    card.remove();
+  };
+
+  return deleteResponse;
 };
 
 export { createCard, likeCard, removeCard };

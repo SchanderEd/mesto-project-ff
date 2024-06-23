@@ -2,9 +2,14 @@ import { closePopup, openPopup } from "./modal.js";
 import { popupConfirmDelete } from '../../index.js';
 import { removeCard } from "../card/card.js";
 
-const confirmDeleteHandler = (evt) => {
-  closePopup(popupConfirmDelete);
-  removeCard(evt);
+const confirmDeleteHandler = async (evt) => {
+  evt.target.textContent = 'Удаление...';
+  const responseDelete = await removeCard(evt);
+
+  if (responseDelete.ok) {
+    closePopup(popupConfirmDelete);
+    evt.target.textContent = 'Да';
+  };
 };
 
 const cardDeletePopupHandler = (evt) => {
