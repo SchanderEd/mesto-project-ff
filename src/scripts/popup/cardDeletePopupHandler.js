@@ -9,6 +9,8 @@ const confirmDeleteHandler = async (evt) => {
   if (responseDelete.ok) {
     closePopup(popupConfirmDelete);
     evt.target.textContent = 'Да';
+  } else {
+    evt.target.textContent = 'Ошибка удаления';
   };
 };
 

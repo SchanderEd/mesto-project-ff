@@ -64,6 +64,8 @@ const removeCard = async (evt) => {
 
   if (deleteResponse.ok) {
     card.remove();
+  } else {
+    return deleteResponse;
   };
 
   return deleteResponse;
