@@ -12,6 +12,7 @@ import { newCardHandler } from './scripts/addNewCard/addNewCardHandler';
 import { editProfileHandler } from './scripts/profile/editProfileHandler';
 import { updateAvatarHandlerPopup } from './scripts/avatar/updateAvatarHandlerPopup';
 import { updateAvatarHandler } from './scripts/avatar/updateAvatarHandler';
+import { cardDeletePopupHandler } from './scripts/popup/cardDeletePopupHandler';
 
 const profileForm = document.forms['edit-profile'];
 const newAvatarForm = document.forms['new-avatar'];
@@ -21,6 +22,7 @@ const nameInput = profileForm.querySelector('.popup__input_type_name');
 const urlAvatarInput = newAvatarForm.querySelector('.popup__input_type_url-avatar');
 const descriptionInput = profileForm.querySelector('.popup__input_type_description');
 const popupEdit = document.querySelector('.popup_type_edit');
+const popupConfirmDelete = document.querySelector('.popup_type_confirm-delete');
 const updateAvatarBtn = document.querySelector('.profile__image-update');
 const popupNewCard = document.querySelector('.popup_type_new-card');
 const newAvatarPopup = document.querySelector('.popup_type_new-avatar');
@@ -49,7 +51,7 @@ const renderCards = async (cardsData, profileData) => {
   const profile = await profileData;
 
   cards.forEach((cardData) => {
-    const card = createCard(cardData, removeCard, handlePreviewPicture, likeCard, profile);
+    const card = createCard(cardData, cardDeletePopupHandler, handlePreviewPicture, likeCard, profile);
     cardsList.append(card);
   });
 };
@@ -93,5 +95,6 @@ export {
   settingsValidation,
   profileAvatar,
   newAvatarPopup,
-  urlAvatarInput
+  urlAvatarInput,
+  popupConfirmDelete
 };

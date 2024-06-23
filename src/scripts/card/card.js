@@ -58,9 +58,9 @@ const likeCard = (evt) => {
 };
 
 const removeCard = (evt) => {
-  const cardItem = evt.target.closest('.card');
-  deleteCard(cardItem.id);
-  cardItem.remove();
+  const card = document.getElementById(evt.target.id);
+  deleteCard(card.id);
+  card.remove();
 };
 
 export { createCard, likeCard, removeCard };
