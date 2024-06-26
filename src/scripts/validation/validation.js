@@ -1,22 +1,21 @@
-import { settingsValidation } from "../../index.js";
-
-const showInputError = (formElement, inputElement, errorMessage) => {
+const showInputError = (formElement, inputElement, errorMessage, settings) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
-  inputElement.classList.add(settingsValidation.inputErrorClass);
+  inputElement.classList.add(settings.inputErrorClass);
 
   errorElement.textContent = errorMessage;
-  errorElement.classList.add(settingsValidation.errorClass);
+  errorElement.classList.add(settings.errorClass);
 };
 
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement, settings) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove(settingsValidation.inputErrorClass);
-  errorElement.classList.remove(settingsValidation.errorClass);
+
+  inputElement.classList.remove(settings.inputErrorClass);
+  errorElement.classList.remove(settings.errorClass);
   errorElement.textContent = '';
 };
 
-const checkInputValidation = (formElement, inputElement) => {
+const checkInputValidation = (formElement, inputElement, settings) => {
 
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity("Поля могут содержать только латинские и кириллические буквы, знаки дефиса и пробелы.");
@@ -25,21 +24,21 @@ const checkInputValidation = (formElement, inputElement) => {
   }
 
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage, settings);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, settings);
   }
 };
 
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll(settingsValidation.inputSelector));
-  const buttonElement = formElement.querySelector(settingsValidation.submitButtonSelector);
+const setEventListeners = (formElement, settings) => {
+  const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
+  const buttonElement = formElement.querySelector(settings.submitButtonSelector);
 
   toggleButtonState(inputList, buttonElement);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
-      checkInputValidation(formElement, inputElement);
+      checkInputValidation(formElement, inputElement, settings);
       toggleButtonState(inputList, buttonElement);
     });
   });
@@ -69,20 +68,20 @@ const enableValidation = (settings) => {
       evt.preventDefault();
     });
 
-    setEventListeners(form);
+    setEventListeners(form, settings);
   });
 };
 
-const clearInputsError = (popup) => {
-  const form = popup.querySelector('.popup__form');
-  const inputList = Array.from(form.querySelectorAll(settingsValidation.inputSelector));
-  const buttonElement = form.querySelector(settingsValidation.submitButtonSelector);
+const clearInputsError = (settings, popup) => {
+  const form = popup.querySelector(settings.formSelector);
+  const inputList = Array.from(popup.querySelectorAll(settings.inputSelector));
+  const buttonElement = form.querySelector(settings.submitButtonSelector);
 
   inputList.forEach((inputElement) => {
-    hideInputError(form, inputElement);
+    hideInputError(popup, inputElement, settings);
   });
 
   toggleButtonState(inputList, buttonElement);
 };
 
-export { hideInputError, enableValidation, toggleButtonState, clearInputsError };
+export { enableValidation, clearInputsError };

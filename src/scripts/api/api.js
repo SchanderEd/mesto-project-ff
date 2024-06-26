@@ -1,3 +1,5 @@
+import { renderSaving } from "../renderSaving/renderSaving.js";
+
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-17/',
   headers: {
@@ -5,9 +7,6 @@ const config = {
     'Content-Type': 'application/json'
   }
 };
-
-import { nameInput, descriptionInput, cardNameInput, cardPlaceInput, urlAvatarInput } from "../../index.js";
-import { renderSaving } from "../renderSaving/renderSaving.js";
 
 const checkResponse = (resStatus) => {
   if (resStatus.ok) {
@@ -24,7 +23,6 @@ const getCards = () => {
     },
   })
     .then((res) => checkResponse(res))
-    .then((cards) => cards)
     .catch((err) => console.log(err))
 };
 
@@ -35,11 +33,10 @@ const getProfile = () => {
     }
   })
     .then((res) => checkResponse(res))
-    .then((profileData) => profileData)
     .catch((err) => console.log(err));
 };
 
-const editProfile = () => {
+const editProfile = (nameInput, descriptionInput) => {
   renderSaving(true);
 
   return fetch(`${config.baseUrl}users/me`, {
@@ -61,7 +58,7 @@ const editProfile = () => {
     .finally(() => renderSaving(false))
 };
 
-const newCardSubmit = () => {
+const newCardSubmit = (cardNameInput, cardPlaceInput) => {
   renderSaving(true);
 
   return fetch(`${config.baseUrl}cards`, {
@@ -76,7 +73,6 @@ const newCardSubmit = () => {
     })
   })
     .then((res) => checkResponse(res))
-    .then((cardData) => cardData)
     .catch((err) => console.log(err))
     .finally(() => renderSaving(false))
 };
@@ -91,7 +87,6 @@ const updateLike = async (cardId, method) => {
       profile
     })
   }).then((res) => checkResponse(res))
-    .then((card) => card)
     .catch((err) => console.log(err));
 };
 
@@ -104,7 +99,7 @@ const deleteCard = (cardId) => {
   });
 };
 
-const updateAvatar = () => {
+const updateAvatar = (urlAvatarInput) => {
   renderSaving(true);
   return fetch(`${config.baseUrl}users/me/avatar`, {
     method: 'PATCH',
@@ -116,13 +111,9 @@ const updateAvatar = () => {
       avatar: urlAvatarInput.value
     })
   }).then((res) => checkResponse(res))
-    .then((newAvatar) => newAvatar)
     .catch((err) => console.log(err))
     .finally(() => renderSaving(false));
 };
-
-const profile = getProfile();
-const cards = getCards();
 
 export {
   getCards,
@@ -130,8 +121,6 @@ export {
   editProfile,
   newCardSubmit,
   deleteCard,
-  profile,
-  cards,
   updateLike,
   updateAvatar
 };

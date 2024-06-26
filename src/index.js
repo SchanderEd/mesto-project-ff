@@ -1,18 +1,8 @@
 import './index.css';
-import { createCard, removeCard, likeCard } from './scripts/card/card';
-import { closePopupHandler } from './scripts/popup/modal.js';
-import { profilePopupHandler } from './scripts/popup/profileHandler.js';
-import { handlePreviewPicture } from './scripts/popup/previewImgHandler.js';
-import { newCardPopupHandler } from './scripts/popup/newCardPopupHandler';
-import { enableValidation } from './scripts/validation/validation.js';
-import { getCards, getProfile } from './scripts/api/api.js';
-import { renderProfile } from './scripts/profile/renderProfile';
-import { profile, cards } from './scripts/api/api.js';
-import { newCardHandler } from './scripts/addNewCard/addNewCardHandler';
-import { editProfileHandler } from './scripts/profile/editProfileHandler';
-import { updateAvatarHandlerPopup } from './scripts/avatar/updateAvatarHandlerPopup';
-import { updateAvatarHandler } from './scripts/avatar/updateAvatarHandler';
-import { cardDeletePopupHandler } from './scripts/popup/cardDeletePopupHandler';
+import { createCard, likeCard, removeCard } from './scripts/card/card';
+import { closePopupHandler, openPopup, closePopup } from './scripts/modal/modal.js';
+import { enableValidation, clearInputsError } from './scripts/validation/validation.js';
+import { getCards, getProfile, newCardSubmit, updateAvatar, editProfile } from './scripts/api/api.js';
 
 const profileForm = document.forms['edit-profile'];
 const newAvatarForm = document.forms['new-avatar'];
@@ -36,6 +26,8 @@ const profileDescription = document.querySelector('.profile__description');
 const popupImg = document.querySelector('.popup_type_image');
 const closePopupBtns = document.querySelectorAll('.popup__close');
 const popups = document.querySelectorAll('.popup');
+const profile = getProfile();
+const cards = getCards();
 
 const settingsValidation = {
   formSelector: '.popup__form',
@@ -54,6 +46,94 @@ const renderCards = async (cardsData, profileData) => {
     const card = createCard(cardData, cardDeletePopupHandler, handlePreviewPicture, likeCard, profile);
     cardsList.append(card);
   });
+};
+
+const profilePopupHandler = () => {
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
+
+  clearInputsError(settingsValidation, popupEdit);
+  openPopup(popupEdit);
+};
+
+const editProfileHandler = async () => {
+  const updatedProfile = await editProfile(nameInput, descriptionInput);
+  renderProfile(updatedProfile);
+};
+
+const renderProfile = async (profileData) => {
+  const profile = await profileData;
+  
+  nameInput.value = profile.name;
+  descriptionInput.value = profile.about;
+
+  profileTitle.textContent = profile.name;
+  profileDescription.textContent = profile.about;
+  profileAvatar.src = profile.avatar;
+};
+
+const handlePreviewPicture = (evt) => {
+  const img = evt.target;
+
+  const imgData = document.querySelector('.popup__image');
+  imgData.src = img.src;
+
+  const popupCaption = document.querySelector('.popup__caption');
+  popupCaption.textContent = img.alt;
+
+  openPopup(popupImg);
+};
+
+const newCardPopupHandler = () => {
+  const form = popupNewCard.querySelector('.popup__form');
+  form.reset();
+  clearInputsError(settingsValidation, popupNewCard);
+  openPopup(popupNewCard);
+};
+
+const newCardHandler = async () => {
+  const newCard = await newCardSubmit(cardNameInput, cardPlaceInput);
+  const profile = await getProfile();
+  const card = createCard(newCard, cardDeletePopupHandler, handlePreviewPicture, likeCard, profile);
+  cardsList.prepend(card);
+};
+
+const confirmDeleteHandler = async (evt) => {
+  evt.target.textContent = 'Удаление...';
+  const responseDelete = await removeCard(evt);
+
+  if (responseDelete.ok) {
+    closePopup(popupConfirmDelete);
+    evt.target.textContent = 'Да';
+  } else {
+    evt.target.textContent = 'Ошибка удаления';
+  };
+};
+
+const cardDeletePopupHandler = (evt) => {
+  const cardItem = evt.target.closest('.card');
+  const confirmBtn = popupConfirmDelete.querySelector('.popup__button');
+  confirmBtn.id = cardItem.id;
+
+  confirmBtn.addEventListener('click', confirmDeleteHandler);
+
+  openPopup(popupConfirmDelete);
+};
+
+const updateAvatarHandler = async () => {
+  const newAvatar = await updateAvatar(urlAvatarInput);
+  renderNewAvatar(newAvatar);
+};
+
+const updateAvatarHandlerPopup = () => {
+  const form = newAvatarPopup.querySelector('.popup__form');
+  form.reset();
+  clearInputsError(settingsValidation, newAvatarPopup);
+  openPopup(newAvatarPopup);
+};
+
+const renderNewAvatar = (newAvatar) => {
+  profileAvatar.src = newAvatar.avatar;
 };
 
 Promise.all([
@@ -75,26 +155,3 @@ newCardForm.addEventListener('submit', newCardHandler);
 newAvatarForm.addEventListener('submit', updateAvatarHandler);
 
 enableValidation(settingsValidation);
-
-export {
-  profileForm,
-  newCardForm,
-  nameInput,
-  descriptionInput,
-  profileEditBtn,
-  newCardBtn,
-  cardsList,
-  cardNameInput,
-  cardPlaceInput,
-  profileTitle,
-  profileDescription,
-  popups,
-  popupImg,
-  popupEdit,
-  popupNewCard,
-  settingsValidation,
-  profileAvatar,
-  newAvatarPopup,
-  urlAvatarInput,
-  popupConfirmDelete
-};

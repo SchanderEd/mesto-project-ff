@@ -1,4 +1,4 @@
-import { closePopup } from "../popup/modal.js";
+import { closePopup } from "../modal/modal.js";
 
 const renderSaving = (isSaving) => {
   const popup = document.querySelector('.popup_is-opened');
