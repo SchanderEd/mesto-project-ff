@@ -82,8 +82,8 @@
         <h3 class="popup__title">Обновить аватар</h3>
         <form class="popup__form" name="new-avatar">
           <label class="popup__input-wrapper">
-            <input type="url" name="link-avatar" class="popup__input popup__input_type_url-avatar" placeholder="Ссылка на картинку"
-              id="url-avatar-input" required>
+            <input type="url" name="link-avatar" class="popup__input popup__input_type_url-avatar"
+              placeholder="Ссылка на картинку" id="url-avatar-input" required>
             <span class="popup__input-error url-avatar-input-error"></span>
           </label>
           <button type="submit" class="button popup__button">Сохранить</button>
@@ -103,10 +103,12 @@
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Вы уверены?</h3>
-      <button class="button popup__button">Да</button>
+      <form name="confirm-delete">
+        <button type="submit" class="button popup__button">Да</button>
+      </form>
     </div>
   </div>
-</div>
+  </div>
 
   <template id="card-template">
     <li class="places__item card">

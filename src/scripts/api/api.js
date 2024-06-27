@@ -1,5 +1,3 @@
-import { renderSaving } from "../renderSaving/renderSaving.js";
-
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-17/',
   headers: {
@@ -10,7 +8,7 @@ const config = {
 
 const checkResponse = (resStatus) => {
   if (resStatus.ok) {
-    return resStatus.json()
+    return Promise.resolve(resStatus.json());
   };
 
   return Promise.reject(`Ошибка: ${resStatus.status}`);
@@ -21,9 +19,7 @@ const getCards = () => {
     headers: {
       authorization: config.headers.authorization
     },
-  })
-    .then((res) => checkResponse(res))
-    .catch((err) => console.log(err))
+  }).then((res) => checkResponse(res))
 };
 
 const getProfile = () => {
@@ -31,14 +27,10 @@ const getProfile = () => {
     headers: {
       authorization: config.headers.authorization
     }
-  })
-    .then((res) => checkResponse(res))
-    .catch((err) => console.log(err));
+  }).then((res) => checkResponse(res))
 };
 
 const editProfile = (nameInput, descriptionInput) => {
-  renderSaving(true);
-
   return fetch(`${config.baseUrl}users/me`, {
     method: 'PATCH',
     headers: {
@@ -49,18 +41,10 @@ const editProfile = (nameInput, descriptionInput) => {
       name: nameInput.value,
       about: descriptionInput.value
     })
-  })
-    .then(() => {
-      const updatedProfile = getProfile();
-      return updatedProfile;
-    })
-    .catch((err) => console.log(err))
-    .finally(() => renderSaving(false))
+  }).then((res) => checkResponse(res))
 };
 
 const newCardSubmit = (cardNameInput, cardPlaceInput) => {
-  renderSaving(true);
-
   return fetch(`${config.baseUrl}cards`, {
     method: 'POST',
     headers: {
@@ -71,13 +55,10 @@ const newCardSubmit = (cardNameInput, cardPlaceInput) => {
       name: cardNameInput.value,
       link: cardPlaceInput.value
     })
-  })
-    .then((res) => checkResponse(res))
-    .catch((err) => console.log(err))
-    .finally(() => renderSaving(false))
+  }).then((res) => checkResponse(res))
 };
 
-const updateLike = async (cardId, method) => {
+const updateLike = (cardId, method, profile) => {
   return fetch(`${config.baseUrl}cards/likes/${cardId}`, {
     method: method,
     headers: {
@@ -87,7 +68,6 @@ const updateLike = async (cardId, method) => {
       profile
     })
   }).then((res) => checkResponse(res))
-    .catch((err) => console.log(err));
 };
 
 const deleteCard = (cardId) => {
@@ -96,11 +76,10 @@ const deleteCard = (cardId) => {
     headers: {
       authorization: config.headers.authorization,
     },
-  });
+  }).then((res) => checkResponse(res));
 };
 
 const updateAvatar = (urlAvatarInput) => {
-  renderSaving(true);
   return fetch(`${config.baseUrl}users/me/avatar`, {
     method: 'PATCH',
     headers: {
@@ -111,8 +90,6 @@ const updateAvatar = (urlAvatarInput) => {
       avatar: urlAvatarInput.value
     })
   }).then((res) => checkResponse(res))
-    .catch((err) => console.log(err))
-    .finally(() => renderSaving(false));
 };
 
 export {
@@ -122,5 +99,6 @@ export {
   newCardSubmit,
   deleteCard,
   updateLike,
-  updateAvatar
+  updateAvatar,
+  checkResponse
 };
