@@ -8,21 +8,19 @@ const createCard = (cardData, removeCard, openPopup, profile) => {
 
   card.id = cardData._id;
 
-  profile.then((profile) => {
-    const isLikedCard = cardData.likes.some((likedCard) => likedCard._id === profile._id);
+  const isLikedCard = cardData.likes.some((likedCard) => likedCard._id === profile._id);
 
-    if (isLikedCard) {
-      likeBtn.classList.add('card__like-button_is-active');
-    };
+  if (isLikedCard) {
+    likeBtn.classList.add('card__like-button_is-active');
+  };
 
-    if (cardData.owner._id !== profile._id) {
-      const deleteBtn = card.querySelector('.card__delete-button');
-      card.removeChild(deleteBtn);
-    } else {
-      const deleteButton = card.querySelector('.card__delete-button');
-      deleteButton.addEventListener('click', removeCard);
-    };
-  })
+  if (cardData.owner._id !== profile._id) {
+    const deleteBtn = card.querySelector('.card__delete-button');
+    card.removeChild(deleteBtn);
+  } else {
+    const deleteButton = card.querySelector('.card__delete-button');
+    deleteButton.addEventListener('click', removeCard);
+  };
 
   const cardImg = card.querySelector('.card__image');
   cardImg.src = cardData.link;

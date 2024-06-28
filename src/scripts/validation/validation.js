@@ -34,22 +34,22 @@ const setEventListeners = (formElement, settings) => {
   const inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));
   const buttonElement = formElement.querySelector(settings.submitButtonSelector);
 
-  toggleButtonState(inputList, buttonElement);
+  toggleButtonState(inputList, buttonElement, settings);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
       checkInputValidation(formElement, inputElement, settings);
-      toggleButtonState(inputList, buttonElement);
+      toggleButtonState(inputList, buttonElement, settings);
     });
   });
 };
 
-const toggleButtonState = (inputList, buttonElement) => {
+const toggleButtonState = (inputList, buttonElement, settings) => {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add('button_inactive');
+    buttonElement.classList.add(settings.disabledButton);
     buttonElement.setAttribute('disabled', 'disabled')
   } else {
-    buttonElement.classList.remove('button_inactive');
+    buttonElement.classList.remove(settings.disabledButton);
     buttonElement.removeAttribute('disabled')
   };
 };
@@ -81,7 +81,7 @@ const clearInputsError = (settings, popup) => {
     hideInputError(popup, inputElement, settings);
   });
 
-  toggleButtonState(inputList, buttonElement);
+  toggleButtonState(inputList, buttonElement, settings);
 };
 
 export { enableValidation, clearInputsError };
